@@ -1,0 +1,84 @@
+name: Publish Docker image
+
+on:
+  release:
+    types: [ published, prereleased ]
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        vips_version: [ '8.12.2', '8.13.0-rc1' ]
+        version:
+          - name: ''
+            build-args: ''
+
+          - name: 'magick'
+            build-args: |
+              MAGICK=1
+
+          - name: 'full'
+            build-args: |
+              MAGICK=1
+              MAGICK_OPENEXR=1
+              MAGICK_LCMS=1
+              MAGICK_HDRI=1
+              JPEG=1
+              JP2=1
+              JPEGXL=1
+              EXIF=1
+              GIF=1
+              PNG=1
+              PNG_QUANT=1
+              WEBP=1
+              TIFF=1
+              PDF=1 
+              SVG=1
+              OPENEXR=1
+              HEIF=1
+              FITS=1
+              OPENSLIDE=1
+              NIFTI=1
+              MATIO=1
+              LCMS=1
+              FFTW=1
+              GSF=1
+              PANGO=1
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        if: "matrix.version.name != ''"
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          build-args: |
+            VIPS_VERSION=${{ matrix.vips_version }}
+            ${{ matrix.version.build-args }}
+          tags: |
+            codercms/vips-alpine:${{ matrix.vips_version }}-${{ matrix.version.name }}
+            codercms/vips-alpine:${{ matrix.vips_version }}-${{ matrix.version.name }}-latest
+
+      - name: Build and push default
+        if: "matrix.version.name == ''"
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          build-args: |
+            VIPS_VERSION=${{ matrix.vips_version }}
+            ${{ matrix.version.build-args }}
+          tags: |
+            codercms/vips-alpine:${{ matrix.vips_version }}
+            codercms/vips-alpine:${{ matrix.vips_version }}-latest
