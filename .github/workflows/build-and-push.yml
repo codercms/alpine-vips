@@ -76,7 +76,7 @@ jobs:
             codercms/vips-alpine:${{ github.event.release.tag_name }}-${{ matrix.version.name }}
 
       - name: Build and push default
-        if: "matrix.version.name == ''"
+        if: "matrix.version.name == '' && !contains(github.event.release.tag_name, 'rc')"
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -88,3 +88,16 @@ jobs:
           tags: |
             codercms/vips-alpine:${{ github.event.release.tag_name }}
             codercms/vips-alpine:latest
+
+      - name: Build and push RC default
+        if: "matrix.version.name == '' && contains(github.event.release.tag_name, 'rc')"
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+#          platforms: linux/amd64,linux/arm64
+          build-args: |
+            VIPS_VERSION=${{ github.event.release.tag_name }}
+            ${{ matrix.version.build-args }}
+          tags: |
+            codercms/vips-alpine:${{ github.event.release.tag_name }}
