@@ -74,7 +74,6 @@ jobs:
             ${{ matrix.version.build-args }}
           tags: |
             codercms/vips-alpine:${{ github.event.release.tag_name }}-${{ matrix.version.name }}
-            codercms/vips-alpine:${{ github.event.release.tag_name }}-${{ matrix.version.name }}-latest
 
       - name: Build and push default
         if: "matrix.version.name == ''"
@@ -88,5 +87,4 @@ jobs:
             ${{ matrix.version.build-args }}
           tags: |
             codercms/vips-alpine:${{ github.event.release.tag_name }}
-            codercms/vips-alpine:${{ github.event.release.tag_name }}-latest
             codercms/vips-alpine:latest
