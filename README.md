@@ -1,6 +1,11 @@
 # alpine-vips
 Customizable image with libvips for Alpine Linux
 
+## Usage
+```
+docker run --rm -v /your/images-path:/imgs codercms/vips-alpine vips copy /imgs/image.webp /imgs/image-converted.jpg
+```
+
 ## Build args
 Set needed argument to 1 to enable feature, 0 to disable feature
 

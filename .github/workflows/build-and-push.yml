@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        vips_version: [ '8.12.2', '8.13.0-rc1' ]
         version:
           - name: ''
             build-args: ''
@@ -63,12 +62,13 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64
           build-args: |
-            VIPS_VERSION=${{ matrix.vips_version }}
+            VIPS_VERSION=${{ github.event.release.tag_name }}
             ${{ matrix.version.build-args }}
           tags: |
-            codercms/vips-alpine:${{ matrix.vips_version }}-${{ matrix.version.name }}
-            codercms/vips-alpine:${{ matrix.vips_version }}-${{ matrix.version.name }}-latest
+            codercms/vips-alpine:${{ github.event.release.tag_name }}-${{ matrix.version.name }}
+            codercms/vips-alpine:${{ github.event.release.tag_name }}-${{ matrix.version.name }}-latest
 
       - name: Build and push default
         if: "matrix.version.name == ''"
@@ -76,9 +76,11 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64
           build-args: |
-            VIPS_VERSION=${{ matrix.vips_version }}
+            VIPS_VERSION=${{ github.event.release.tag_name }}
             ${{ matrix.version.build-args }}
           tags: |
-            codercms/vips-alpine:${{ matrix.vips_version }}
-            codercms/vips-alpine:${{ matrix.vips_version }}-latest
+            codercms/vips-alpine:${{ github.event.release.tag_name }}
+            codercms/vips-alpine:${{ github.event.release.tag_name }}-latest
+            codercms/vips-alpine:latest
