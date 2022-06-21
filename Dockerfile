@@ -66,7 +66,7 @@ ARG MAGICK_HDRI=0
 
 RUN set -x -o pipefail \
     && apk update \
-    && deps_str='glib zlib expat' && dev_deps_str='make gcc g++ libc-dev glib-dev expat-dev zlib-dev' \
+    && deps_str='glib zlib expat orc' && dev_deps_str='make gcc g++ libc-dev glib-dev expat-dev zlib-dev orc-dev' \
     && if [ "${JPEG}" -eq 1 ]; then deps_str="${deps_str} libjpeg-turbo" dev_deps_str="${dev_deps_str} libjpeg-turbo-dev"; fi \
     && if [ "${JP2}" -eq 1 ]; then deps_str="${deps_str} openjpeg" dev_deps_str="${dev_deps_str} openjpeg-dev"; fi \
     && if [ "${JPEGXL}" -eq 1 ]; then deps_str="${deps_str} libjxl" dev_deps_str="${dev_deps_str} libjxl-dev"; fi \
