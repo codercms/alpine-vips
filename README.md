@@ -2,8 +2,14 @@
 Customizable image with libvips for Alpine Linux
 
 ## Usage
+Mass thumbnail generation:
 ```
-docker run --rm -v /your/images-path:/imgs codercms/vips-alpine vips copy /imgs/image.webp /imgs/image-converted.jpg
+docker run --rm -v YOUR_IMGS_PATH:/imgs -w /imgs codercms/vips-alpine:8.12.2 vipsthumbnail *.jpg --export-profile=srgb --size='600x>' -o tn_%s.jpg[optimize_coding,strip,interlace,Q=90]
+```
+
+Convert picture format:
+```
+docker run --rm -v YOUR_IMGS_PATH:/imgs -w /imgs codercms/vips-alpine:8.12.2 vips copy image.webp image-converted.jpg
 ```
 
 ## Build args
